@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {
+/* basic */ 
+ background: alice-blue;
+ margin: 0 auto;
+ width: 200px;
+ padding: 10px;
+ text-align: center;
+/* border-radius */
+/* box-shadow */
+ -webkit-box-shadow: rgba(0,0,0,0.8) 0px 0 10px;
+ -moz-box-shadow: rgba(0,0,0,0.8) 0 0 10px;
+ box-shadow: rgba(0,0,0,0.8) 0 0 10px;
+}
+</style>
+</head>
+<a target="_blank" href="https://isis.tu-berlin.de/login/index.php">Login in background</a>
+<div class="form-group">
+
+<form id="user-form">
+  username: <input type="text" name="username"><br>
+  password: <input type="password" name="password"><br><br>
+  <button type="submit" id="save-user" value="Save user">Save User</button>
+  <div class="form-check">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" name="" id="enable-checkbox" value="checkedValue" checked>
+    Enabled
+  </label>
+</div>
+</form>
+
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

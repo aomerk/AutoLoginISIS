@@ -1,0 +1,37 @@
+{
+  "name": "ISIS Auto Login",
+  "version": "0.8",
+  "description": "entera basmak istemiyorum",
+  "homepage_url": "https://aliomerkeser.codes",
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/icon.png",
+        "32": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
+      }
+    },
+    "icons": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+    },
+    "manifest_version": 2,
+    "permissions": [
+      "*://isis.tu-berlin.de/login/index.php",
+      "https://shibboleth.tubit.tu-berlin.de/idp/profile/",
+      "activeTab",
+      "tabs",
+      "storage",
+      "webRequest",
+      "webRequestBlocking"
+    ]
+}
