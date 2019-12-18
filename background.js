@@ -59,6 +59,9 @@ function login() {
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         // for the current tab, inject the "inject.js" file & execute it
         if (tab.status === "complete" && isEnabled) {
+            if (tab.url === "https://isis.tu-berlin.de/" && isEnabled){
+                tab.url = 'https://isis.tu-berlin.de/login/index.php'
+            }
             if (tab.url === "https://isis.tu-berlin.de/login/index.php" && isEnabled) {
 
                 chrome.tabs.executeScript(tab.ib, {
