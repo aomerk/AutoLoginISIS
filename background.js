@@ -3,28 +3,20 @@ var isEnabled = false;
 
 (function () {
     chrome.storage.sync.get(['user', 'enabled'], function (result) {
-        user = JSON.parse(result.user);
-        isEnabled = result.enabled;
+        if (result.user == null) {
+            user.username = ''
+            user.password = ''
+            return;
+        }
+        if (result.enabled == null) {
+            isEnabled = true;
+            return;
+        }
+        user = (result.user !== null) ? JSON.parse(result.user) : '';
+        isEnabled = (result.enabled !== null) ? result.enabled : false;
         login()
     })
 }())
-chrome.webRequest.onHeadersReceived.addListener(
-    function(info) {
-        var headers = info.responseHeaders;
-        for (var i=headers.length-1; i>=0; --i) {
-            var header = headers[i].name.toLowerCase();
-            if (header == 'x-frame-options' || header == 'frame-options') {
-                headers.splice(i, 1); // Remove header
-            }
-        }
-        return {responseHeaders: headers};
-    },
-    {
-        urls: [ '*://*/*' ], // Pattern to match all http(s) pages
-        types: [ 'sub_frame' ]
-    },
-    ['blocking', 'responseHeaders']
-);
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
@@ -47,7 +39,7 @@ function login() {
         if (tab.status === "complete" && isEnabled) {
             if (tab.url === "https://isis.tu-berlin.de/login/index.php" && isEnabled) {
                 console.log('executing' + isEnabled);
-                
+
                 chrome.tabs.executeScript(tab.ib, {
                     code: '	document.getElementById("shibbolethbutton").click()'
                 });
