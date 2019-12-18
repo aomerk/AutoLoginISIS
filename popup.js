@@ -19,6 +19,7 @@ getData();
 
 function getData() {
     chrome.storage.sync.get(['user', 'enabled'], function (result) {
+        console.log(result.user)
         currentUser = JSON.parse(result.user);
         checkbox.checked = result.enabled;
         console.log('Value is  ' + JSON.stringify(currentUser));
@@ -36,6 +37,9 @@ function saveUser(event) {
         'user': JSON.stringify(currentUser)
     }, function () {
         getData()
+        chrome.runtime.sendMessage({
+            reason : "user"
+        }, function (response) {});
         alert(`new user ${currentUser.username} saved`);
     });
     event.preventDefault();
@@ -47,6 +51,7 @@ checkbox.addEventListener('change', function () {
         getData()
     });
     chrome.runtime.sendMessage({
-        enabled: this.checked
+        enabled: this.checked,
+        reason : "checkbox"
     }, function (response) {});
 })

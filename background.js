@@ -1,44 +1,65 @@
-var user = '';
+// dummy credentials
+var user = {
+    username: 'please enter credentials',
+    password: ''
+};
 var isEnabled = false;
 
-(function () {
+// initializer IIFE 
+var initializer;
+(initializer = () => {
     chrome.storage.sync.get(['user', 'enabled'], function (result) {
-        if (result.user == null) {
-            user.username = ''
-            user.password = ''
-            return;
+
+        if (result.enabled == null || result.enabled == undefined) {
+            isEnabled = false;
+        } else {
+            isEnabled = result.enabled;
         }
-        if (result.enabled == null) {
-            isEnabled = true;
-            return;
+
+
+        if (result.user == null || result.user == undefined) {
+            isEnabled = false;
+            chrome.storage.sync.set({
+                'enabled': false
+            })
+            chrome.storage.sync.set({
+                'user': JSON.stringify(user)
+            })
+
+        } else {
+            user = JSON.parse(result.user)
         }
-        user = (result.user !== null) ? JSON.parse(result.user) : '';
-        isEnabled = (result.enabled !== null) ? result.enabled : false;
         login()
     })
-}())
+})();
 
+
+// listen to checkbox change
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         console.log(request.enabled);
         isEnabled = request.enabled;
-        if (request.enabled) {
-            location.reload
+        if (request.reason == "checkbox") {
+            if (request.enabled) {
+                location.reload
+            }
+            login()
         }
-        login()
+        if (request.reason == "user"){
+            initializer()
+        }
+
         sendResponse({
             ok: "ok"
         })
     });
 
+// login automate
 function login() {
-    console.log('enabled ' + isEnabled)
-    // listen for our browerAction to be clicked
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         // for the current tab, inject the "inject.js" file & execute it
         if (tab.status === "complete" && isEnabled) {
             if (tab.url === "https://isis.tu-berlin.de/login/index.php" && isEnabled) {
-                console.log('executing' + isEnabled);
 
                 chrome.tabs.executeScript(tab.ib, {
                     code: '	document.getElementById("shibbolethbutton").click()'
